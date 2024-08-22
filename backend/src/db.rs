@@ -32,6 +32,5 @@ static DB_POOL: Lazy<Arc<Pool>> = Lazy::new(|| {
 
 #[allow(non_snake_case)]
 pub async fn DB_CLIENT() -> Object {
-    // TODO error handling
     DB_POOL.get().await.expect("cannot connect to db")
 }

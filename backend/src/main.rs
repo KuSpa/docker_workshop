@@ -18,6 +18,7 @@ struct AllTodos {
 
 #[get("/todos")]
 async fn get_todo() -> HttpResponse {
+    log::debug!("Get all todos");
     match TodoItem::all().await {
         Ok(todos) => {
             let all_todos = AllTodos { todos };
@@ -38,15 +39,14 @@ struct CreateTodo {
     content: String,
 }
 
-// TODO read json
 #[put("/todos")]
 async fn insert_todo(request: Json<CreateTodo>) -> HttpResponse {
-    log::debug!("{}", &request.content);
+    log::debug!("Insert: {}", &request.content);
     match TodoItem::insert(&request.content).await {
         Ok(_) => HttpResponse::Ok().into(),
         Err(err) => {
             log::warn!("unable to insert item: {:?}", err);
-            // ERROR don't have db active and see this error
+            // TODO don't have db active and see this error
             HttpResponse::InternalServerError().json("unable to insert item")
         }
     }
@@ -54,6 +54,7 @@ async fn insert_todo(request: Json<CreateTodo>) -> HttpResponse {
 
 #[delete("/todos/{id}")]
 async fn delete_todo(id: web::Path<i32>) -> HttpResponse {
+    log::debug!("Delete: {}", *id);
     match TodoItem::delete(*id).await {
         Ok(list) => HttpResponse::Ok().json(list),
         Err(err) => {
