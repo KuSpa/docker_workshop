@@ -1,0 +1,48 @@
+name: react-rust-postgres
+services:
+  frontend:
+    build: 
+      context: frontend
+      dockerfile: ./Dockerfile
+    networks:
+      - web-facing
+    ports:
+      - 80:80
+
+  backend:
+  # Task: bauen
+    build:
+      context: backend
+      dockerfile: ./Dockerfile
+    environment:
+      - ADDRESS=0.0.0.0:8000
+      - RUST_LOG=debug
+      - PG_DBNAME=postgres
+      - PG_HOST=db
+      - PG_USER=postgres
+      # ERROR: Nicht setzen und gucken was passiert
+      - PG_PASSWORD=mysecretpassword
+    networks:
+      - web-facing
+      - internal
+    depends_on:
+      - db
+    ports:
+    # Task: WARUM müssen wir das machen?
+      - 8000:8000
+
+  db:
+    image: postgres:12-alpine
+    # ERROR don't have this and see how be fails too
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=mysecretpassword
+    networks:
+      - internal
+    # brauchen wir nicht,weil internal network
+    #ports:
+    #  - 5432:5432
+
+networks:
+  web-facing: {}
+  internal: {}
