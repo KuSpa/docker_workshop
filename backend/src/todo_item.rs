@@ -1,4 +1,6 @@
-use tokio_postgres::{Error, GenericClient, Row};
+use tokio_postgres::{Error, Row};
+
+use crate::db::DB_CLIENT;
 
 #[derive(Debug, serde_derive::Serialize)]
 pub struct TodoItem {
@@ -16,14 +18,18 @@ impl From<Row> for TodoItem {
 }
 
 impl TodoItem {
-    pub async fn all<C: GenericClient>(client: &C) -> Result<Vec<TodoItem>, Error> {
-        let rows = client.query("SELECT id, content FROM todos", &[]).await?;
+    pub async fn all() -> Result<Vec<TodoItem>, Error> {
+        let rows = DB_CLIENT()
+            .await
+            .query("SELECT id, content FROM todos", &[])
+            .await?;
 
         Ok(rows.into_iter().map(TodoItem::from).collect())
     }
 
-    pub async fn insert<C: GenericClient>(client: &C, content: &String) -> Result<u64, Error> {
-        client
+    pub async fn insert(content: &String) -> Result<u64, Error> {
+        DB_CLIENT()
+            .await
             .execute(
                 "INSERT INTO todos
                 (id, content)
@@ -34,10 +40,11 @@ impl TodoItem {
             .await
     }
 
-    pub async fn delete<C: GenericClient>(client: &C, id: i32) -> Result<u64, Error> {
-        client
+    pub async fn delete(id: i32) -> Result<u64, Error> {
+        DB_CLIENT()
+            .await
             .execute(
-                // TODO maybe have a syntac error here?
+                // TODO maybe have a syntac error
                 "DELETE FROM todos
                WHERE
                 id = $1",
