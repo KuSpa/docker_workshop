@@ -7,6 +7,17 @@ Just run
 ```
 cargo run 
 ```
-And see no backend spinning up. Why? Because you probably don't have cargo installed. Even if, the error message hints that you need some db-configuration like a dbName to run the backend. Thus, it makes little sense to run this backend outside of the larger context.
+And see no backend spinning up. Why? Because you probably don't have cargo installed (Shame).
 
-See [../compose.yaml](../compose.yaml) to see what config is required.
+### Run with docker
+Run 
+```
+docker build -t backend .
+```
+to build.
+
+Run
+```
+docker run -p 8000:8000 backend
+```
+to run.

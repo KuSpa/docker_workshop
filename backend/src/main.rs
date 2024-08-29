@@ -1,3 +1,5 @@
+use std::time::{SystemTime, UNIX_EPOCH};
+
 use actix_cors::Cors;
 use actix_web::{
     delete, get, put,
@@ -6,9 +8,8 @@ use actix_web::{
 };
 use serde_derive::{Deserialize, Serialize};
 use todo_item::TodoItem;
+use todo_item::TODOS;
 
-mod db;
-mod db_migration;
 mod todo_item;
 
 #[derive(Serialize)]
@@ -19,19 +20,12 @@ struct AllTodos {
 #[get("/todos")]
 async fn get_todo() -> HttpResponse {
     log::debug!("Get all todos");
-    match TodoItem::all().await {
-        Ok(todos) => {
-            let all_todos = AllTodos { todos };
-            let return_string = serde_json::to_string(&all_todos).unwrap();
-            HttpResponse::Ok()
-                .content_type("application/json")
-                .body(return_string)
-        }
-        Err(err) => {
-            log::warn!("unable to fetch users: {:?}", err);
-            HttpResponse::InternalServerError().json("unable to fetch users")
-        }
-    }
+    let todos: Vec<TodoItem> = TODOS.read().unwrap().iter().map(TodoItem::from).collect();
+    let all_todos = AllTodos { todos };
+    let return_string = serde_json::to_string(&all_todos).unwrap();
+    HttpResponse::Ok()
+        .content_type("application/json")
+        .body(return_string)
 }
 
 #[derive(Deserialize)]
@@ -42,26 +36,23 @@ struct CreateTodo {
 #[put("/todos")]
 async fn insert_todo(request: Json<CreateTodo>) -> HttpResponse {
     log::debug!("Insert: {}", &request.content);
-    match TodoItem::insert(&request.content).await {
-        Ok(_) => HttpResponse::Ok().into(),
-        Err(err) => {
-            log::warn!("unable to insert item: {:?}", err);
-            // TODO don't have db active and see this error
-            HttpResponse::InternalServerError().json("unable to insert item")
-        }
-    }
+    let very_serious_id: u128 = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap()
+        .as_millis();
+    TODOS
+        .write()
+        .unwrap()
+        .insert(very_serious_id as i32, request.content.clone());
+    HttpResponse::Ok().into()
 }
 
 #[delete("/todos/{id}")]
 async fn delete_todo(id: web::Path<i32>) -> HttpResponse {
     log::debug!("Delete: {}", *id);
-    match TodoItem::delete(*id).await {
-        Ok(list) => HttpResponse::Ok().json(list),
-        Err(err) => {
-            log::warn!("unable to delete item: {:?}", err);
-            HttpResponse::InternalServerError().json("unable to delete item")
-        }
-    }
+    let mut map = TODOS.write().unwrap();
+    map.remove(&*id);
+    HttpResponse::Ok().into()
 }
 
 fn address() -> String {
