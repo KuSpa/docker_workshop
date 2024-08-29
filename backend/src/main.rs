@@ -65,7 +65,7 @@ async fn delete_todo(id: web::Path<i32>) -> HttpResponse {
 }
 
 fn address() -> String {
-    std::env::var("ADDRESS").unwrap_or_else(|_| "127.0.0.1:8000".into())
+    std::env::var("ADDRESS").unwrap_or_else(|_| "0.0.0.0:8000".into())
 }
 
 #[actix_web::main]

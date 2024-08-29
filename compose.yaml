@@ -10,11 +10,11 @@ services:
       - 80:80
 
   backend:
-  # Task: bauen
     build:
       context: backend
       dockerfile: ./Dockerfile
     environment:
+      # Localhost address setzen und dann fragen was nicht stimmt :)
       - ADDRESS=0.0.0.0:8000
       - RUST_LOG=debug
       - PG_DBNAME=postgres

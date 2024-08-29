@@ -4,7 +4,7 @@ import TodoItem from "./TodoItem.tsx";
 
 
 function App() {
-  const [todos, setTodos] = useState([{ content: 'foobar', id: 3 }, { content: 'foutrinae dtuinadetr uidteaundtaeruned uet uditeotdruiartn uina udtieanudteautd endu edu tbar', id: 32 }, { content: 'foobar', id: 35 }, { content: 'foobar', id: 1 }]);
+  const [todos, setTodos] = useState([]);
   const [content, setContent] = useState('');
 
 
