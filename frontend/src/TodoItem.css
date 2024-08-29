@@ -1,0 +1,15 @@
+li {
+  background-color: whitesmoke;
+  border: 1px solid aliceblue;
+  border-radius: 8px 0 8px 8px;
+  box-shadow: 2px 5px 16px lightblue;
+  list-style-type: none; /* Remove bullets */
+  padding: 16px; /* Remove padding */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.button{
+  align-self: flex-end;
+}

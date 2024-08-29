@@ -1,4 +1,5 @@
 import React from "react";
+import "./TodoItem.css";
 
 export interface TodoItem {
   id: number;
@@ -14,7 +15,7 @@ function TodoItem(input: { item: TodoItem, refreshTodos: () => void }) {
   }
 
   return (
-    <li> {input.item.content} <button onClick={click}>Löschen</button>
+    <li key={input.item.id}> <p>{input.item.content}</p> <button  className='button' onClick={click}>Löschen</button>
     </li>
   );
 }

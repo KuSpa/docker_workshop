@@ -1,4 +1,6 @@
 body {
   height: 100vh;
+  background-color: whitesmoke;
   margin:0;
+  font-family: Helvetica, Arial, sans-serif;
 }

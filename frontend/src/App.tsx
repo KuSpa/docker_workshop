@@ -4,7 +4,7 @@ import TodoItem from "./TodoItem.tsx";
 
 
 function App() {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState([{ content: 'foobar', id: 3 }, { content: 'foutrinae dtuinadetr uidteaundtaeruned uet uditeotdruiartn uina udtieanudteautd endu edu tbar', id: 32 }, { content: 'foobar', id: 35 }, { content: 'foobar', id: 1 }]);
   const [content, setContent] = useState('');
 
 
@@ -12,7 +12,6 @@ function App() {
     fetch("http://localhost:8000/todos", {
       method: 'GET'
     })
-      .then((res) => { console.warn(res); return res })
       .then((res) => res.json())
       .then((res) => setTodos(res.todos))
       .catch(console.error);
@@ -31,23 +30,25 @@ function App() {
       .catch(console.error);
   }
 
-  return (<div className="container">
-    <div className="centered">
-      <header>
+  return (<div>
+    <header>
+      <div className="centered header-display">
+        <h1> Fancy TODO App</h1>
         <form onSubmit={addTodo}>
           <input name="content" type="text" value={content} onChange={(e) => setContent(e.target.value)} ></input> <button type="submit"> Hinzufügen</button>
         </form>
-      </header>
-      <div>
+      </div>
+    </header>
+    <div className="container">
+      <div className="centered">
+
         <ul>
           {todos.map(todo =>
             <TodoItem item={todo} refreshTodos={getTodos}></TodoItem>
           )}
         </ul>
-      </div>
-    </div></div>
+      </div></div></div>
   );
 }
 
 export default App;
-// contextAPI react
