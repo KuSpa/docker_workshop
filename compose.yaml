@@ -1,25 +1,13 @@
 name: react-rust-postgres
 services:
-  frontend:
-    build: 
-      context: frontend
-      dockerfile: ./Dockerfile
-    networks:
-      - web-facing
-    ports:
-      - 80:80
-
+#  frontend:
+#    oh-no: my-cat-bit-my-lochkarten-now-all-the-bits-are-flipped
   backend:
     build:
       context: backend
       dockerfile: ./Dockerfile
     environment:
-      - ADDRESS=0.0.0.0:8000
       - RUST_LOG=debug
-      - PG_DBNAME=postgres
-      - PG_HOST=db
-      - PG_USER=postgres
-      - PG_PASSWORD=mysecretpassword
     networks:
       - web-facing
       - internal
