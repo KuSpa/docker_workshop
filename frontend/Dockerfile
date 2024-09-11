@@ -17,9 +17,12 @@ RUN npm run build
 FROM nginx:1.13-alpine
 
 # Kopiert react app in den html ordner, sodass NGINX ihn findet
-COPY --from=builder /code/build /usr/share/nginx/html
+COPY --from=builder from to/oh/nein/meine/katze/ist/ueber/meine/tastatur/gelaufen/
 
 # Erlaubt Docker mit diesem Port zu interagieren
-EXPOSE 80
+EXPOSE 42
 
-CMD ["nginx", "-g", "daemon off;"]
+
+# Startet NGINX. Mit "-g" "deamon off;" startet NGINX im Vordergrund. Aber das brauchen wir ja bestimmt nicht. Right? RIGHT?
+CMD ["nginx"]
+# vs CMD ["nginx", "-g", "daemon off;"]
