@@ -71,8 +71,17 @@ fn address() -> String {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     env_logger::init();
-    db_migration::migrate_up().await;
 
+    let log_level =  std::env::var("RUST_LOG").unwrap_or("info".to_owned());
+    if log_level != "debug" {
+        log::info!(
+            "Log level is {}. To see more verbose logging, set environment variable to 'debug'.",
+            log_level
+        );
+    }
+
+    db_migration::migrate_up().await;
+    
     let address = address();
 
     HttpServer::new(move || {
