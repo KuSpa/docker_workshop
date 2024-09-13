@@ -1,6 +1,6 @@
 # Backend: Fancy TODO App
 
-This folder contains a simple rust actix backend. 
+This folder contains a simple rust actix backend. :)
 It uses the Rust language (See below how to compile).
 It listens to all incoming HTTP requests on Port 8000.
 It uses the environment variable RUST_LOG (e.g. 'info' or 'debug') for logging.
