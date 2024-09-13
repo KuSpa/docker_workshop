@@ -11,6 +11,6 @@ And see no backend spinning up. Why? Because you probably don't have cargo insta
 
 The following environment variables are required:
 * PG_HOST (address of the docker running the db)
-* PG_DBNAME (should be 'db')
+* PG_DBNAME (should be 'postgres')
 * PG_USER (should be 'postgres')
 * PG_PASSWORD (should not be written in plain text due to security reasons ;). However rumor has it that the postgres docker has a similar setting where you can look)
